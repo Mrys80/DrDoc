@@ -1,0 +1,28 @@
+﻿using DrDoc.Common.Entities.Abstracts;
+using DrDoc.Common.Utilities.Enums;
+
+namespace DrDoc.Common.Utilities.Results
+{
+    public class SuccessDataResult<T> : DataResult<T> where T : class, IDto
+    {
+        public SuccessDataResult(T data, Messages messageId) : base(data, true, messageId)
+        {
+
+        }
+
+        public SuccessDataResult(T data) : base(data, true)
+        {
+
+        }
+
+        public SuccessDataResult(Messages messageId) : base(default, true, messageId)
+        {
+
+        }
+
+        public SuccessDataResult() : base(default, true)
+        {
+
+        }
+    }
+}
