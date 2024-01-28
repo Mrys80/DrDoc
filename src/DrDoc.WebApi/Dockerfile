@@ -5,16 +5,16 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Teb.WebApi/Teb.WebApi.csproj", "Teb.WebApi/"]
-RUN dotnet restore "Teb.WebApi/Teb.WebApi.csproj"
+COPY ["DrDoc.WebApi/DrDoc.WebApi.csproj", "DrDoc.WebApi/"]
+RUN dotnet restore "DrDoc.WebApi/DrDoc.WebApi.csproj"
 COPY . .
-WORKDIR "/src/Teb.WebApi"
-RUN dotnet build "Teb.WebApi.csproj" -c Release -o /app/build
+WORKDIR "/src/DrDoc.WebApi"
+RUN dotnet build "DrDoc.WebApi.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Teb.WebApi.csproj" -c Release -o /app/publish
+RUN dotnet publish "DrDoc.WebApi.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Teb.WebApi.dll","--urls=http://0.0.0.0:82"]
+ENTRYPOINT ["dotnet", "DrDoc.WebApi.dll","--urls=http://0.0.0.0:90"]
