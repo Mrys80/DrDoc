@@ -35,6 +35,39 @@ public class UserController : BaseController
         return Ok(result);
     }
 
+
+    [HttpPut("[action]")]
+    public async Task<IActionResult> UpdateUser(
+        UserUpdateDto userUpdateDto, CancellationToken cancellationToken
+    )
+    {
+        var result =
+            await _userService.UpdateUser(
+                userUpdateDto, cancellationToken
+            );
+
+        if (!result.IsSuccess)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetUser(
+        [FromQuery] string nationalCode, CancellationToken cancellationToken
+    )
+    {
+        var result =
+            await _userService.GetUser(
+                nationalCode, cancellationToken
+            );
+
+        if (!result.IsSuccess)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
+
     [HttpPost("[action]")]
     public async Task<IActionResult> AddUserDrugAllergy(
         UserDrugAllergyAddDto userDrugAllergyAddDto, CancellationToken cancellationToken

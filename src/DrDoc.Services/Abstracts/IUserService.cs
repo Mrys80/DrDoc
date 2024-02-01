@@ -15,6 +15,14 @@ public interface IUserService
     Task<IDataResult<UserDto>> AddUser(
         CurrentUserDto currentUser, UserAddDto userAddDto, CancellationToken cancellationToken);
 
+
+    Task<IDataResult<UserDto>> UpdateUser(
+        UserUpdateDto userUpdateDto, CancellationToken cancellationToken);
+
+    Task<IDataResult<UserDto>> GetUser(
+        string nationalCode, CancellationToken cancellationToken);
+
+
     Task<IResult> AddUserDrugAllergy(
         CurrentUserDto currentUser, UserDrugAllergyAddDto userDrugAllergyAddDto, CancellationToken cancellationToken);
 

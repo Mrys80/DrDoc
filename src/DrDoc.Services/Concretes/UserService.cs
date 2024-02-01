@@ -79,6 +79,44 @@ public class UserService : IUserService, IScopedDependency
         return new SuccessDataResult<UserDto>(userDto);
     }
 
+    public async Task<IDataResult<UserDto>> UpdateUser(UserUpdateDto userUpdateDto,
+        CancellationToken cancellationToken)
+    {
+        var user = await _userRepository.TableNoTracking.FirstOrDefaultAsync(user =>
+            user.Id == userUpdateDto.userId, cancellationToken: cancellationToken);
+
+        if (user is null)
+            return new ErrorDataResult<UserDto>(Messages.NotFound);
+
+
+        user.FirstName = userUpdateDto.FirstName ?? user.FirstName;
+        user.LastName = userUpdateDto.LastName ?? user.LastName;
+        user.NationalCode = userUpdateDto.NationalCode ?? user.NationalCode;
+        user.Gender = userUpdateDto.Gender ?? user.Gender;
+        user.PhoneNumber = userUpdateDto.PhoneNumber ?? user.PhoneNumber;
+        user.BirthDate = userUpdateDto.BirthDate ?? user.BirthDate;
+        user.Address = userUpdateDto.Address ?? user.Address;
+
+        await _userRepository.UpdateAsync(user, cancellationToken);
+
+
+        var userDto = user.Adapt<UserDto>();
+        return new SuccessDataResult<UserDto>(userDto);
+    }
+
+    public async Task<IDataResult<UserDto>> GetUser(string nationalCode,
+        CancellationToken cancellationToken)
+    {
+        var user = await _userRepository.TableNoTracking.FirstOrDefaultAsync(user =>
+            user.NationalCode == nationalCode, cancellationToken: cancellationToken);
+
+        if (user is null)
+            return new ErrorDataResult<UserDto>(Messages.NotFound);
+
+        var userDto = user.Adapt<UserDto>();
+        return new SuccessDataResult<UserDto>(userDto);
+    }
+
     public async Task<IResult> AddUserDrugAllergy(CurrentUserDto currentUser,
         UserDrugAllergyAddDto userDrugAllergyAddDto,
         CancellationToken cancellationToken)
