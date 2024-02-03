@@ -1,9 +1,12 @@
-﻿using DrDoc.Common.Entities.Dto;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using DrDoc.Common.Entities.Dto;
 using DrDoc.Entities.Dto.UserDisease;
 using DrDoc.Entities.Dto.UserDrugAllergy;
 using DrDoc.Entities.Dto.UserFoodAllergy;
 using DrDoc.Services.Abstracts;
 using DrDoc.WebFramework.Api;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DrDoc.WebApi.Controllers.v1;
@@ -60,6 +63,20 @@ public class UserController : BaseController
         var result =
             await _userService.GetUser(
                 nationalCode, cancellationToken
+            );
+
+        if (!result.IsSuccess)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetAllUser(CancellationToken cancellationToken
+    )
+    {
+        var result =
+            await _userService.GetAllUser(cancellationToken
             );
 
         if (!result.IsSuccess)

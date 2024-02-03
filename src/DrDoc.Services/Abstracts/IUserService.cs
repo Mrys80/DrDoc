@@ -21,6 +21,8 @@ public interface IUserService
 
     Task<IDataResult<UserDto>> GetUser(
         string nationalCode, CancellationToken cancellationToken);
+        
+    Task<IListResult<List<UserDto>>> GetAllUser(CancellationToken cancellationToken);
 
 
     Task<IResult> AddUserDrugAllergy(

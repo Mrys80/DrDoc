@@ -1,12 +1,16 @@
-﻿using DrDoc.Entities.Dto.Drug;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using DrDoc.Entities.Dto.Drug;
 using DrDoc.Entities.Dto.DrugCategory;
 using DrDoc.Entities.Dto.FoodCategory;
 using DrDoc.Services.Abstracts;
 using DrDoc.WebFramework.Api;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DrDoc.WebApi.Controllers.v1;
 
+[ApiVersion("1")]
 public class DrugController:BaseController
 {
     private readonly IDrugService _drugService;

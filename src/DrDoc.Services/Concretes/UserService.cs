@@ -117,6 +117,26 @@ public class UserService : IUserService, IScopedDependency
         return new SuccessDataResult<UserDto>(userDto);
     }
 
+    public async Task<IListResult<List<UserDto>>> GetAllUser(CancellationToken cancellationToken)
+    {
+        var users = await _userRepository.TableNoTracking
+            .Where(x => x.RoleId == 3 && !x.IsDeleted)
+            .Select(x => new UserDto
+            {
+                Id = x.Id,
+                PhoneNumber = x.PhoneNumber,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                NationalCode = x.NationalCode,
+                BirthDate = x.BirthDate,
+                Gender = x.Gender,
+                Address = x.Address,
+            })
+            .ToListAsync(cancellationToken);
+
+        return new SuccessListResult<List<UserDto>>(users);
+    }
+
     public async Task<IResult> AddUserDrugAllergy(CurrentUserDto currentUser,
         UserDrugAllergyAddDto userDrugAllergyAddDto,
         CancellationToken cancellationToken)
