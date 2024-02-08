@@ -13,10 +13,11 @@ public class ReferralsGetDto : IDto
     public DiseaseCategoryGetDto DiseaseCategory { get; set; }
     public string Description { get; set; }
     public string? HR { get; set; }
+    public string? BP { get; set; }
+
     public string? RR { get; set; }
     public string? SPO2 { get; set; }
     public string? Temp { get; set; }
     public string? Glucose { get; set; }
-    
-    
+    public DateTime? RegDate { get; set; }
 }

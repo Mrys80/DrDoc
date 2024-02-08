@@ -79,10 +79,12 @@ public class ReferralsService : IReferralsService, IScopedDependency
                 },
                 Description = reff.Description,
                 HR = reff.HR,
+                BP = reff.BP,
                 RR = reff.RR,
                 SPO2 = reff.SPO2,
                 Temp = reff.Temp,
-                Glucose = reff.Glucose
+                Glucose = reff.Glucose,
+                RegDate = reff.RegDate
             }
         ).ToListAsync(cancellationToken);
         return new SuccessListResult<List<ReferralsGetDto>>(r);
@@ -137,9 +139,11 @@ public class ReferralsService : IReferralsService, IScopedDependency
                 Description = reff.Description,
                 HR = reff.HR,
                 RR = reff.RR,
+                BP = reff.BP,
                 SPO2 = reff.SPO2,
                 Temp = reff.Temp,
-                Glucose = reff.Glucose
+                Glucose = reff.Glucose,
+                RegDate = reff.RegDate
             }
         ).ToListAsync(cancellationToken);
 
@@ -157,6 +161,7 @@ public class ReferralsService : IReferralsService, IScopedDependency
             DiseaseId = referralsAddDto.DiseaseId,
             Description = referralsAddDto.Description,
             HR = referralsAddDto.HR,
+            BP = referralsAddDto.BP,
             RR = referralsAddDto.RR,
             SPO2 = referralsAddDto.SPO2,
             Temp = referralsAddDto.Temp,
@@ -167,9 +172,8 @@ public class ReferralsService : IReferralsService, IScopedDependency
         };
 
         await _referralsRepository.AddAsync(referrals, cancellationToken);
-        
+
 
         return new SuccessDataResult<ReferralsGetDto>(Messages.SuccessfullyDone);
-
     }
 }
