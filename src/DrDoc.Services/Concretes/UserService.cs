@@ -1,4 +1,5 @@
-﻿using DrDoc.Common.Abstracts;
+﻿using Castle.Core.Internal;
+using DrDoc.Common.Abstracts;
 using DrDoc.Common.Entities.Dto;
 using DrDoc.Common.Entities.Entities;
 using DrDoc.Common.Utilities.Enums;
@@ -79,28 +80,40 @@ public class UserService : IUserService, IScopedDependency
         return new SuccessDataResult<UserDto>(userDto);
     }
 
-    public async Task<IDataResult<UserDto>> UpdateUser(UserUpdateDto userUpdateDto,
-        CancellationToken cancellationToken)
+    public async Task<IDataResult<UserDto>> UpdateUser(UserUpdateDto userUpdateDto, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.TableNoTracking.FirstOrDefaultAsync(user =>
-            user.Id == userUpdateDto.userId, cancellationToken: cancellationToken);
+        var user = await _userRepository.GetAsync(user => user.Id == userUpdateDto.userId, cancellationToken);
 
         if (user is null)
             return new ErrorDataResult<UserDto>(Messages.NotFound);
 
 
-        user.FirstName = userUpdateDto.FirstName ?? user.FirstName;
-        user.LastName = userUpdateDto.LastName ?? user.LastName;
-        user.NationalCode = userUpdateDto.NationalCode ?? user.NationalCode;
-        user.Gender = userUpdateDto.Gender ?? user.Gender;
-        user.PhoneNumber = userUpdateDto.PhoneNumber ?? user.PhoneNumber;
-        user.BirthDate = userUpdateDto.BirthDate ?? user.BirthDate;
-        user.Address = userUpdateDto.Address ?? user.Address;
+        if (!userUpdateDto.FirstName.IsNullOrEmpty())
+            user.FirstName = userUpdateDto.FirstName;
+
+        if (!userUpdateDto.LastName.IsNullOrEmpty())
+            user.LastName = userUpdateDto.LastName;
+
+        if (!userUpdateDto.NationalCode.IsNullOrEmpty())
+            user.NationalCode = userUpdateDto.NationalCode;
+
+        if (!userUpdateDto.Gender.IsNullOrEmpty())
+            user.Gender = userUpdateDto.Gender;
+
+        if (!userUpdateDto.PhoneNumber.IsNullOrEmpty())
+            user.PhoneNumber = userUpdateDto.PhoneNumber;
+
+        if (userUpdateDto.BirthDate.IsNullOrEmpty())
+            user.BirthDate = userUpdateDto.BirthDate;
+
+        if (!userUpdateDto.Address.IsNullOrEmpty())
+            user.Address = userUpdateDto.Address;
+
 
         await _userRepository.UpdateAsync(user, cancellationToken);
 
-
         var userDto = user.Adapt<UserDto>();
+
         return new SuccessDataResult<UserDto>(userDto);
     }
 
@@ -273,5 +286,61 @@ public class UserService : IUserService, IScopedDependency
         ).ToListAsync(cancellationToken);
 
         return new SuccessListResult<List<UserDiseaseGetDto>>(userDiseases);
+    }
+
+    public async Task<IResult> DeleteUserDrugAllergy(DeleteDrugAllergy deleteDrugAllergy,
+        CancellationToken cancellationToken)
+    {
+        var userAllergy = await _userDrugAllergyRepository.GetAsync(
+            x =>
+                x.UserId == deleteDrugAllergy.UserId &&
+                x.DrugId == deleteDrugAllergy.DrugId,
+            cancellationToken);
+
+        if (userAllergy is null)
+            return new ErrorDataResult<UserDto>(Messages.NotFound);
+
+        userAllergy.IsDeleted = true;
+
+        await _userDrugAllergyRepository.UpdateAsync(userAllergy, cancellationToken);
+
+        return new SuccessResult(Messages.SuccessfullyDone);
+    }
+
+    public async Task<IResult> DeleteUserFoodAllergy(DeleteFoodAllergy deleteFoodAllergy,
+        CancellationToken cancellationToken)
+    {
+        var userAllergy = await _userFoodAllergyRepository.GetAsync(
+            x =>
+                x.UserId == deleteFoodAllergy.UserId &&
+                x.FoodId == deleteFoodAllergy.FoodId,
+            cancellationToken);
+
+        if (userAllergy is null)
+            return new ErrorDataResult<UserDto>(Messages.NotFound);
+
+        userAllergy.IsDeleted = true;
+
+        await _userFoodAllergyRepository.UpdateAsync(userAllergy, cancellationToken);
+
+        return new SuccessResult(Messages.SuccessfullyDone);
+    }
+
+    public async Task<IResult> DeleteUserDisease(DeleteDisease deleteDisease, CancellationToken cancellationToken)
+    {
+        var userAllergy = await _userDiseaseRepository.GetAsync(
+            x =>
+                x.UserId == deleteDisease.UserId &&
+                x.DiseaseId == deleteDisease.DiseaseId,
+            cancellationToken);
+
+        if (userAllergy is null)
+            return new ErrorDataResult<UserDto>(Messages.NotFound);
+
+        userAllergy.IsDeleted = true;
+
+        await _userDiseaseRepository.UpdateAsync(userAllergy, cancellationToken);
+
+        return new SuccessResult(Messages.SuccessfullyDone);
     }
 }

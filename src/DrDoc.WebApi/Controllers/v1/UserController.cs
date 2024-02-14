@@ -171,4 +171,44 @@ public class UserController : BaseController
 
         return Ok(result);
     }
+
+
+    [HttpDelete("[action]")]
+    public async Task<IActionResult> DeleteUserDisease(
+        [FromBody] DeleteDisease deleteDisease, CancellationToken cancellationToken)
+    {
+        var result =
+            await _userService.DeleteUserDisease(deleteDisease, cancellationToken);
+
+        if (!result.IsSuccess)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
+
+    [HttpDelete("[action]")]
+    public async Task<IActionResult> DeleteUserDrugAllergy(
+        [FromBody] DeleteDrugAllergy deleteDrugAllergy, CancellationToken cancellationToken)
+    {
+        var result =
+            await _userService.DeleteUserDrugAllergy(deleteDrugAllergy, cancellationToken);
+
+        if (!result.IsSuccess)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
+    
+    [HttpDelete("[action]")]
+    public async Task<IActionResult> DeleteUserFoodAllergy(
+        [FromBody] DeleteFoodAllergy deleteFoodAllergy, CancellationToken cancellationToken)
+    {
+        var result =
+            await _userService.DeleteUserFoodAllergy(deleteFoodAllergy, cancellationToken);
+
+        if (!result.IsSuccess)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
 }

@@ -1,4 +1,5 @@
-﻿using DrDoc.Common.Entities.Dto;
+﻿using System.Diagnostics;
+using DrDoc.Common.Entities.Dto;
 using DrDoc.Common.Utilities.Results;
 using DrDoc.Entities.Dto;
 using DrDoc.Entities.Dto.Disease;
@@ -21,7 +22,7 @@ public interface IUserService
 
     Task<IDataResult<UserDto>> GetUser(
         string nationalCode, CancellationToken cancellationToken);
-        
+
     Task<IListResult<List<UserDto>>> GetAllUser(CancellationToken cancellationToken);
 
 
@@ -40,4 +41,14 @@ public interface IUserService
     Task<IListResult<List<UserFoodAllergyGetDto>>> GetUserFoodAllergy(int userId, CancellationToken cancellationToken);
 
     Task<IListResult<List<UserDiseaseGetDto>>> GetUserDisease(int userId, CancellationToken cancellationToken);
+
+
+    Task<IResult> DeleteUserDrugAllergy(
+        DeleteDrugAllergy deleteDrugAllergy, CancellationToken cancellationToken);
+
+    Task<IResult> DeleteUserFoodAllergy(
+        DeleteFoodAllergy deleteFoodAllergy, CancellationToken cancellationToken);
+
+    Task<IResult> DeleteUserDisease(
+        DeleteDisease deleteDisease, CancellationToken cancellationToken);
 }
