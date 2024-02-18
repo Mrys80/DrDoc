@@ -154,7 +154,17 @@ public class UserService : IUserService, IScopedDependency
         UserDrugAllergyAddDto userDrugAllergyAddDto,
         CancellationToken cancellationToken)
     {
-        foreach (var drugId in userDrugAllergyAddDto.DrugsId)
+
+        var userDrugs = await _userDrugAllergyRepository.GetListAsync(
+            x =>
+                x.UserId == userDrugAllergyAddDto.UserId &&
+                x.IsDeleted == false,
+            cancellationToken);
+
+        var userDrugIds = userDrugs.Select(x => x.DrugId).ToList();
+        
+
+        foreach (var drugId in userDrugAllergyAddDto.DrugsId.Where(drugId => !userDrugIds.Contains(drugId)))
         {
             await _userDrugAllergyRepository.AddAsync(new UserDrugAllergy
             {
@@ -174,7 +184,20 @@ public class UserService : IUserService, IScopedDependency
         UserFoodAllergyAddDto userFoodAllergyAddDto,
         CancellationToken cancellationToken)
     {
-        foreach (var foodId in userFoodAllergyAddDto.FoodsId)
+        
+        
+        var userFoods = await _userFoodAllergyRepository.GetListAsync(
+            x =>
+                x.UserId == userFoodAllergyAddDto.UserId &&
+                x.IsDeleted == false,
+            cancellationToken);
+
+        var userFoodIds = userFoods.Select(x => x.FoodId).ToList();
+
+
+        
+        foreach (var foodId in userFoodAllergyAddDto.FoodsId
+                     .Where(foodId => !userFoodIds.Contains(foodId)))
         {
             await _userFoodAllergyRepository.AddAsync(new UserFoodAllergy
             {
@@ -194,12 +217,22 @@ public class UserService : IUserService, IScopedDependency
         UserDiseaseAddDto userDiseaseAddDto,
         CancellationToken cancellationToken)
     {
-        foreach (var foodId in userDiseaseAddDto.DiseasesId)
+        
+        var userDiseases = await _userDiseaseRepository.GetListAsync(
+            x =>
+                x.UserId == userDiseaseAddDto.UserId &&
+                x.IsDeleted == false,
+            cancellationToken);
+
+        var userDiseaseIds = userDiseases.Select(x => x.DiseaseId).ToList();
+        
+        
+        foreach (var diseaseId in userDiseaseAddDto.DiseasesId.Where(diseaseId => !userDiseaseIds.Contains(diseaseId)))
         {
             await _userDiseaseRepository.AddAsync(new UserDisease
             {
                 UserId = userDiseaseAddDto.UserId,
-                DiseaseId = foodId,
+                DiseaseId = diseaseId,
                 RegUserId = currentUser.UserId,
                 RegDate = DateTime.Now,
                 IsDeleted = false
