@@ -70,7 +70,7 @@ public class DrugService : IDrugService, IDrugCategoryService, IScopedDependency
 
     public async Task<IListResult<List<DrugCategoryGetDto>>> GetAllDrugCategories(CancellationToken cancellationToken)
     {
-        var drugsCategory = await _drugRepository
+        var drugsCategory = await _drugCategoryRepository
             .GetListAsync(drugCategory => drugCategory.IsDeleted == false, cancellationToken);
         var drugsCategoryDto = drugsCategory.Select(drug => new DrugCategoryGetDto
                 { Id = drug.Id, Title = drug.Title, ImageId = drug.ImageId })
