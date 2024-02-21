@@ -327,7 +327,10 @@ public class UserService : IUserService, IScopedDependency
         var userAllergy = await _userDrugAllergyRepository.GetAsync(
             x =>
                 x.UserId == deleteDrugAllergy.UserId &&
-                x.DrugId == deleteDrugAllergy.DrugId,
+                x.DrugId == deleteDrugAllergy.DrugId &&
+                x.IsDeleted == false,
+
+                
             cancellationToken);
 
         if (userAllergy is null)
@@ -346,7 +349,9 @@ public class UserService : IUserService, IScopedDependency
         var userAllergy = await _userFoodAllergyRepository.GetAsync(
             x =>
                 x.UserId == deleteFoodAllergy.UserId &&
-                x.FoodId == deleteFoodAllergy.FoodId,
+                x.FoodId == deleteFoodAllergy.FoodId&&
+                x.IsDeleted == false,
+
             cancellationToken);
 
         if (userAllergy is null)
@@ -364,7 +369,8 @@ public class UserService : IUserService, IScopedDependency
         var userAllergy = await _userDiseaseRepository.GetAsync(
             x =>
                 x.UserId == deleteDisease.UserId &&
-                x.DiseaseId == deleteDisease.DiseaseId,
+                x.DiseaseId == deleteDisease.DiseaseId &&
+                x.IsDeleted == false,
             cancellationToken);
 
         if (userAllergy is null)
