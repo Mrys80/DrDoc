@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>DrDoc.Services</RootNamespace>
@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="6.1.3" />
-    <PackageReference Include="RestSharp" Version="109.0.1" />
+    <PackageReference Include="RestSharp" Version="112.0.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.6.70" />
   </ItemGroup>
 
